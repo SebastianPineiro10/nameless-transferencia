@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+  <meta name="theme-color" content="#ffffff">
+
+  <title>Transferencia bancaria | Nameless Ink</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800&display=swap"
+    rel="stylesheet"
+  >
+
+  <style>
+    /* =====================================
+       COLORES
+    ===================================== */
+    :root {
+      --amarillo: #efff27;
+      --azul: #3b83a8;
+      --azul-oscuro: #286888;
+      --morado: #48336d;
+      --morado-oscuro: #312348;
+      --blanco: #ffffff;
+      --negro: #171717;
+      --texto: #29233e;
+      --gris: #f7f7fa;
+      --borde: #e4dfec;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      min-height: 100%;
+    }
+
+    /* =====================================
+       FONDO PRINCIPAL
+    ===================================== */
+    body {
+      min-height: 100vh;
+      min-height: 100dvh;
+      padding: 24px 14px;
+      font-family: "DM Sans", sans-serif;
+      color: var(--texto);
+      position: relative;
+      overflow-x: hidden;
+
+      background:
+        radial-gradient(
+          circle at top left,
+          rgba(239, 255, 39, 0.10),
+          transparent 28%
+        ),
+        radial-gradient(
+          circle at bottom right,
+          rgba(59, 131, 168, 0.10),
+          transparent 30%
+        ),
+        linear-gradient(
+          180deg,
+          #ffffff 0%,
+          #fcfcff 100%
+        );
+    }
+
+    /* Líneas decorativas del fondo */
+    body::before {
+      content: "";
+
+      position: fixed;
+      inset: 0;
+
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.9;
+
+      background:
+        radial-gradient(
+          900px 500px at -10% 20%,
+          transparent 74%,
+          rgba(59, 131, 168, 0.14) 74.5%,
+          transparent 75.2%
+        ),
+        radial-gradient(
+          950px 530px at 110% 80%,
+          transparent 74%,
+          rgba(72, 51, 109, 0.10) 74.5%,
+          transparent 75.2%
+        ),
+        radial-gradient(
+          820px 430px at 100% 8%,
+          transparent 76%,
+          rgba(239, 255, 39, 0.16) 76.5%,
+          transparent 77.1%
+        ),
+        radial-gradient(
+          900px 500px at 0% 100%,
+          transparent 76%,
+          rgba(59, 131, 168, 0.09) 76.5%,
+          transparent 77.1%
+        );
+    }
+
+    body::after {
+      content: "";
+
+      position: fixed;
+      inset: 0;
+
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.26;
+
+      background:
+        repeating-linear-gradient(
+          135deg,
+          rgba(59, 131, 168, 0.12) 0px,
+          rgba(59, 131, 168, 0.12) 2px,
+          transparent 2px,
+          transparent 34px
+        );
+    }
+
+    /* =====================================
+       CONTENEDOR
+    ===================================== */
+    .contenedor {
+      width: 100%;
+      max-width: 470px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* =====================================
+       ENCABEZADO
+    ===================================== */
+    .encabezado {
+      text-align: center;
+      padding: 14px 8px 20px;
+    }
+
+    .logo {
+      width: min(100%, 360px);
+      margin: 0 auto 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .logo img {
+      display: block;
+      width: 100%;
+      height: auto;
+      object-fit: contain;
+    }
+
+    h1 {
+      font-family: "Outfit", sans-serif;
+      font-size: 29px;
+      font-weight: 800;
+      line-height: 1.2;
+      letter-spacing: -0.7px;
+      color: var(--morado-oscuro);
+    }
+
+    .subrayado {
+      width: 90px;
+      height: 5px;
+      margin: 14px auto 0;
+      background: var(--amarillo);
+      border-radius: 10px;
+    }
+
+    /* =====================================
+       TARJETAS
+    ===================================== */
+    .card {
+      position: relative;
+      background: rgba(255, 255, 255, 0.94);
+      backdrop-filter: blur(2px);
+
+      padding: 23px 20px;
+      margin-bottom: 16px;
+
+      border: 2px solid var(--azul);
+      border-radius: 22px;
+
+      box-shadow:
+        0 10px 30px rgba(59, 131, 168, 0.10);
+    }
+
+    .card:last-child {
+      margin-bottom: 0;
+    }
+
+    /* =====================================
+       ENCABEZADOS DE TARJETA
+    ===================================== */
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+
+      padding-bottom: 15px;
+      margin-bottom: 18px;
+
+      border-bottom: 1px solid var(--borde);
+    }
+
+    .card-header.solo-titulo {
+      gap: 0;
+    }
+
+    .icono-card {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      flex-shrink: 0;
+
+      width: 43px;
+      height: 43px;
+
+      background: var(--amarillo);
+      border-radius: 12px;
+
+      color: var(--morado-oscuro);
+
+      font-size: 21px;
+      font-weight: 800;
+    }
+
+    .card-header h2 {
+      font-family: "Outfit", sans-serif;
+      font-size: 21px;
+      font-weight: 700;
+      color: var(--morado-oscuro);
+    }
+
+    /* =====================================
+       CAMPOS
+    ===================================== */
+    .campo {
+      margin-bottom: 18px;
+    }
+
+    .campo:last-child {
+      margin-bottom: 0;
+    }
+
+    .etiqueta {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--negro);
+    }
+
+    .dato {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      gap: 10px;
+      min-height: 56px;
+
+      padding: 9px 10px 9px 14px;
+
+      background: var(--gris);
+      border: 1px solid var(--borde);
+      border-radius: 13px;
+    }
+
+    .dato:focus-within {
+      border-color: var(--azul);
+    }
+
+    .valor {
+      flex: 1;
+      min-width: 0;
+
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--morado-oscuro);
+
+      overflow-wrap: anywhere;
+      font-variant-numeric: tabular-nums;
+
+      user-select: all;
+      -webkit-user-select: all;
+    }
+
+    /* =====================================
+       BOTONES COPIAR
+    ===================================== */
+    .copiar {
+      flex-shrink: 0;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      gap: 6px;
+
+      min-width: 88px;
+      min-height: 44px;
+
+      padding: 10px 12px;
+
+      border: none;
+      border-radius: 10px;
+
+      background: var(--morado);
+      color: #ffffff;
+
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 700;
+
+      cursor: pointer;
+
+      transition:
+        background 0.2s,
+        transform 0.2s;
+    }
+
+    .copiar:hover {
+      background: var(--morado-oscuro);
+    }
+
+    .copiar:active {
+      transform: scale(0.97);
+    }
+
+    .copiar.copiado {
+      background: var(--azul);
+    }
+
+    .copiar:focus-visible {
+      outline: 3px solid var(--amarillo);
+      outline-offset: 3px;
+    }
+
+    .copiar svg {
+      width: 15px;
+      height: 15px;
+
+      fill: none;
+      stroke: currentColor;
+
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    /* =====================================
+       NOTA PAYPAL
+    ===================================== */
+    .nota {
+      display: flex;
+      align-items: flex-start;
+      gap: 9px;
+
+      margin-top: 16px;
+      padding: 12px;
+
+      background: #fbfbe9;
+      border: 1px solid #edf2aa;
+      border-radius: 11px;
+
+      color: var(--negro);
+
+      font-size: 12px;
+      font-weight: 600;
+      line-height: 1.5;
+    }
+
+    .nota-icono {
+      font-weight: 800;
+      font-size: 17px;
+      color: var(--morado);
+    }
+
+    /* =====================================
+       RESPONSIVE
+    ===================================== */
+    @media (max-width: 480px) {
+      body {
+        padding: 14px 10px;
+      }
+
+      .encabezado {
+        padding: 8px 5px 18px;
+      }
+
+      .logo {
+        width: min(100%, 325px);
+        margin-bottom: 14px;
+      }
+
+      h1 {
+        font-size: 25px;
+      }
+
+      .card {
+        padding: 19px 15px;
+        border-radius: 18px;
+      }
+
+      .card-header h2 {
+        font-size: 20px;
+      }
+
+      .valor {
+        font-size: 15px;
+      }
+
+      .copiar {
+        min-width: 78px;
+        padding: 9px;
+      }
+    }
+
+    @media (max-width: 360px) {
+      .card {
+        padding: 16px 12px;
+      }
+
+      .valor {
+        font-size: 13px;
+      }
+
+      .copiar {
+        min-width: 70px;
+        font-size: 11px;
+      }
+
+      h1 {
+        font-size: 23px;
+      }
+
+      .etiqueta {
+        font-size: 13px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <main class="contenedor">
+
+    <!-- LOGOTIPO Y TÍTULO -->
+    <header class="encabezado">
+
+      <div class="logo">
+        <img
+          src="./logo.png"
+          alt="Nameless Ink Tattoo Studio"
+        >
+      </div>
+
+      <h1>Transferencia bancaria</h1>
+      <div class="subrayado"></div>
+
+    </header>
+
+    <!-- DATOS BANCARIOS -->
+    <section class="card">
+
+      <div class="card-header solo-titulo">
+        <h2>Datos bancarios</h2>
+      </div>
+
+      <!-- BANCO -->
+      <div class="campo">
+        <span class="etiqueta">Banco</span>
+
+        <div class="dato">
+          <span class="valor" id="banco">
+            NU México
+          </span>
+
+          <button
+            class="copiar"
+            type="button"
+            onclick="copiarDato('banco', this)"
+            aria-label="Copiar banco"
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <rect
+                x="8" y="8"
+                width="12" height="12"
+                rx="2"
+              />
+              <path
+                d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"
+              />
+            </svg>
+            <span>Copiar</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- TITULAR -->
+      <div class="campo">
+        <span class="etiqueta">Nombre del titular</span>
+
+        <div class="dato">
+          <span class="valor" id="titular">
+            Moy Velarde
+          </span>
+
+          <button
+            class="copiar"
+            type="button"
+            onclick="copiarDato('titular', this)"
+            aria-label="Copiar titular"
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <rect
+                x="8" y="8"
+                width="12" height="12"
+                rx="2"
+              />
+              <path
+                d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"
+              />
+            </svg>
+            <span>Copiar</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- CLABE -->
+      <div class="campo">
+        <span class="etiqueta">CLABE interbancaria</span>
+
+        <div class="dato">
+          <span class="valor" id="clabe">
+            638180000185595719
+          </span>
+
+          <button
+            class="copiar"
+            type="button"
+            onclick="copiarDato('clabe', this)"
+            aria-label="Copiar CLABE interbancaria"
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <rect
+                x="8" y="8"
+                width="12" height="12"
+                rx="2"
+              />
+              <path
+                d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"
+              />
+            </svg>
+            <span>Copiar</span>
+          </button>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- PAYPAL -->
+    <section class="card">
+
+      <div class="card-header">
+        <div class="icono-card">P</div>
+        <h2>PayPal</h2>
+      </div>
+
+      <div class="campo">
+        <span class="etiqueta">Usuario PayPal</span>
+
+        <div class="dato">
+          <span class="valor" id="paypal">
+            @moyvelarde
+          </span>
+
+          <button
+            class="copiar"
+            type="button"
+            onclick="copiarDato('paypal', this)"
+            aria-label="Copiar usuario de PayPal"
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <rect
+                x="8" y="8"
+                width="12" height="12"
+                rx="2"
+              />
+              <path
+                d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0 2 2h2"
+              />
+            </svg>
+            <span>Copiar</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="nota">
+        <span class="nota-icono">!</span>
+        <span>
+          Este medio de pago tiene un 6% adicional
+          por comisión de la aplicación.
+        </span>
+      </div>
+
+    </section>
+
+  </main>
+
+  <script>
+    async function copiarDato(id, boton) {
+      const elemento = document.getElementById(id);
+
+      if (!elemento) {
+        return;
+      }
+
+      const valor = elemento.textContent.trim();
+
+      if (id === 'clabe' && !/^\d{18}$/.test(valor)) {
+        alert('La CLABE debe contener 18 dígitos.');
+        return;
+      }
+
+      const texto = boton.querySelector('span');
+
+      try {
+        await navigator.clipboard.writeText(valor);
+
+        texto.textContent = '¡Listo!';
+        boton.classList.add('copiado');
+
+        setTimeout(() => {
+          texto.textContent = 'Copiar';
+          boton.classList.remove('copiado');
+        }, 1800);
+
+      } catch (error) {
+        alert('No se pudo copiar. Selecciona el dato manualmente.');
+      }
+    }
+  </script>
+
+</body>
+</html>
